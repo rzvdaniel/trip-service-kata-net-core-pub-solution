@@ -12,6 +12,8 @@ namespace Engine.Trip
 
         CODE RULES
         - You can't change code if it is not covered by tests (you can do IDE-suggested automated refactors)
+        - You cannot change the public interface of TripService
+        - You cannot introduce state in TripService
     */
 
     public class TripService
