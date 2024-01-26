@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Engine.Exception;
+﻿using Engine.Exception;
 using Engine.User;
+using System.Collections.Generic;
 
 namespace Engine.Trip
 {
@@ -20,29 +19,26 @@ namespace Engine.Trip
     {
         public List<Trip> GetTripsByUser(User.User user)
         {
-            List<Trip> tripList = new List<Trip>();
-            User.User loggedUser = UserSession.GetInstance().GetLoggedUser();
-            bool isFriend = false;
-            if (loggedUser != null)
-            {
-                foreach(User.User friend in user.GetFriends())
-                {
-                    if (friend.Equals(loggedUser))
-                    {
-                        isFriend = true;
-                        break;
-                    }
-                }
-                if (isFriend)
-                {
-                    tripList = TripDAO.FindTripsByUser(user);
-                }
-                return tripList;
-            }
-            else
-            {
+            var loggedInUser = GetLoggedUser() ?? 
                 throw new UserNotLoggedInException();
-            }
+
+            var isFriend = loggedInUser.IsFriend(user);
+
+            var tripList = isFriend ? 
+                FindTripsByUser(user) :
+                new List<Trip>();
+
+            return tripList;
+        }
+
+        protected virtual User.User GetLoggedUser()
+        {
+            return UserSession.GetInstance().GetLoggedUser();
+        }
+
+        protected virtual List<Trip> FindTripsByUser(User.User user)
+        {
+            return TripDAO.FindTripsByUser(user);
         }
     }
 }
