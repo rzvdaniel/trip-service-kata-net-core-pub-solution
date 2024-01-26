@@ -3,6 +3,7 @@ using Engine.Trip;
 using Engine.User;
 using System.ComponentModel;
 using System.Linq;
+using Tests.Mock;
 using Xunit;
 
 namespace Tests
@@ -13,7 +14,7 @@ namespace Tests
         [Description("Should pass if the user is not logged in")]
         public void UserIsNotLoggedIn()
         {
-            var tripServiceTest = new TripServiceTest(null);
+            var tripServiceTest = new TestTripService(null);
 
             Assert.Throws<UserNotLoggedInException>(() => tripServiceTest.GetTripsByUser(new User()));
         }
@@ -24,7 +25,7 @@ namespace Tests
         {
             var loggedInUser = new User();
 
-            var tripServiceTest = new TripServiceTest(loggedInUser);
+            var tripServiceTest = new TestTripService(loggedInUser);
 
             var userWithFriends = new User();
             userWithFriends.AddFriend(loggedInUser);
@@ -43,7 +44,7 @@ namespace Tests
         {
             var loggedInUser = new User();
 
-            var tripServiceTest = new TripServiceTest(loggedInUser);
+            var tripServiceTest = new TestTripService(loggedInUser);
 
             var userWithFriends = new User();
             userWithFriends.AddFriend(loggedInUser);
